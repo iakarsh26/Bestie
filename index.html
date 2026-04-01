@@ -2,279 +2,189 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Bestie Chaos Test 💖</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bestie 💌💖</title>
 
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
 <style>
-body {
-    margin:0;
-    font-family: 'Comic Sans MS', cursive;
-    background: linear-gradient(135deg,#ffd6f6,#d6ccff,#cce7ff);
-    overflow:hidden;
-    text-align:center;
+body{
+  margin:0;
+  font-family:sans-serif;
+  background:linear-gradient(135deg,#ffd6f6,#d6ccff,#cce7ff);
+  text-align:center;
 }
 
-/* Fade */
-.page {
-    display:none;
-    opacity:0;
-    transition:0.5s;
-}
-.active {
-    display:block;
-    opacity:1;
-}
-
-/* Card */
-.card {
-    background:rgba(255,255,255,0.2);
-    backdrop-filter: blur(10px);
-    padding:25px;
-    border-radius:20px;
-    width:90%;
-    max-width:400px;
-    margin:80px auto;
+/* container */
+.card{
+  width:90%;
+  max-width:380px;
+  margin:40px auto;
+  padding:20px;
+  border-radius:20px;
+  background:rgba(255,255,255,0.25);
+  backdrop-filter:blur(10px);
 }
 
-/* Buttons */
-button {
-    padding:10px 20px;
-    margin:8px;
-    border:none;
-    border-radius:25px;
-    cursor:pointer;
+/* pages */
+.page{display:none;opacity:0;transition:0.4s}
+.active{display:block;opacity:1}
+
+/* buttons */
+button{
+  width:100%;
+  padding:12px;
+  margin:8px 0;
+  border:none;
+  border-radius:25px;
+  background:#ff6fa5;
+  color:white;
+  font-size:16px;
 }
 
-.option {
-    background:#ff6fa5;
-    color:white;
-}
+/* progress */
+.bar{height:8px;background:#fff;border-radius:10px}
+.fill{height:100%;width:0;background:#ff6fa5}
 
-/* Progress */
-.progress-container {
-    width:80%;
-    margin:20px auto;
-}
-.progress-bar {
-    height:10px;
-    background:#fff;
-    border-radius:10px;
-    overflow:hidden;
-}
-.progress-fill {
-    height:100%;
-    width:0%;
-    background:#ff6fa5;
-}
-
-/* Loading bar */
-.loading {
-    width:80%;
-    height:10px;
-    background:#eee;
-    margin:20px auto;
-    border-radius:10px;
-    overflow:hidden;
-}
-.loading-fill {
-    height:100%;
-    width:0%;
-    background:#ff6fa5;
-}
-
-/* Floating hearts */
-.heart {
-    position:absolute;
-    color:pink;
-    animation:float 6s linear infinite;
-}
-@keyframes float {
-    0%{transform:translateY(100vh);}
-    100%{transform:translateY(-10vh);}
-}
+/* countdown */
+#count{font-size:30px;font-weight:bold}
 </style>
 </head>
 
 <body>
 
-<audio id="clickSound" src="https://www.soundjay.com/buttons/sounds/button-3.mp3"></audio>
-<audio id="wrongSound" src="https://www.soundjay.com/button/beep-10.mp3"></audio>
-
-<div class="progress-container">
-    <div class="progress-bar">
-        <div class="progress-fill" id="progress"></div>
-    </div>
-    <p id="progressText">Bestie Test Progress: 0% 😏</p>
-    <p id="pageCount">Page 1/7</p>
+<div style="width:80%;margin:auto">
+<div class="bar"><div class="fill" id="fill"></div></div>
+<p id="pageNo">Page 1/6</p>
 </div>
 
-<!-- PAGES -->
-
-<div class="page active" id="p1">
+<!-- PAGE 1 -->
+<div class="page active">
 <div class="card">
-<h2>Initializing Bestie Test 🤖</h2>
-<p>Checking loyalty level...</p>
-<button onclick="nextPage()">Start Test 😎</button>
+<h2>Enter Bestie Name 💖</h2>
+<input id="nameInput" placeholder="Type name..." style="width:100%;padding:10px;border-radius:10px;border:none">
+<button onclick="start()">Generate Link 🔗</button>
+<p id="linkBox"></p>
 </div>
 </div>
 
-<div class="page" id="p2">
+<!-- PAGE 2 -->
+<div class="page">
 <div class="card">
-<h2>Who is more pagal? 😂</h2>
-<button class="option" onclick="answer(true)">Both 😂</button>
-<button class="option" onclick="answer(false)">You 😌</button>
-<button class="option" onclick="answer(false)">Me 😎</button>
-<p id="msg"></p>
+<h2 id="hello"></h2>
+<button onclick="next()">Start 😎</button>
 </div>
 </div>
 
-<div class="page" id="p3">
+<!-- PAGE 3 -->
+<div class="page">
 <div class="card">
-<h2>Who owes food? 🍕</h2>
-<button class="option" onclick="food()">You owe me</button>
-<button class="option" onclick="food()">I owe you</button>
-<button class="option" onclick="food()">Ignore 😎</button>
-<p id="foodMsg"></p>
+<h2>Who reached first? 😏</h2>
+<button onclick="next()">You</button>
+<button onclick="next()">Me</button>
+<button onclick="next()">Fate 😂</button>
 </div>
 </div>
 
-<div class="page" id="p4">
+<!-- PAGE 4 -->
+<div class="page">
 <div class="card">
-<h2>Remember embarrassing moment? 👀</h2>
-<button class="option" onclick="memory(true)">Yes 😭</button>
-<button class="option" onclick="memory(false)">No 😐</button>
-<p id="memMsg"></p>
+<h2>Do you remember first meet date? 👀</h2>
+<button onclick="next()">Yes 😌</button>
+<button onclick="next()">No 😐</button>
 </div>
 </div>
 
-<div class="page" id="p5">
+<!-- PAGE 5 (COUNTDOWN + DRAMA) -->
+<div class="page">
 <div class="card">
-<h2>Analyzing Results... ⏳</h2>
-<div class="loading"><div class="loading-fill" id="load"></div></div>
+<h2 id="drama">I think we shouldn't be besties anymore...</h2>
+<p id="count">3</p>
 </div>
 </div>
 
-<div class="page" id="p6">
+<!-- PAGE 6 FINAL -->
+<div class="page">
 <div class="card">
-<h2>RESULT 😎</h2>
-<p>YOU ARE STUCK WITH ME FOREVER 💖</p>
-<button onclick="nextPage()">Accept your fate 😂</button>
-</div>
-</div>
 
-<div class="page" id="p7">
-<div class="card">
-<h2>🎉 Congrats 🎉</h2>
+<h2>YOU ARE STUCK WITH ME 💖😎</h2>
+<p>No refund policy 😏</p>
 
-<img src="https://media.giphy.com/media/blSTtZehjAZ8I/giphy.gif" width="150">
-<img src="https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif" width="150">
+<img src="https://media.giphy.com/media/blSTtZehjAZ8I/giphy.gif">
 
-<p>
-You passed the chaos test 😂<br>
-You're officially my bestie 🫶<br>
-No return policy 😎
+<p style="font-size:14px">
+Sach bolu… hum dono perfect nahi hain 😂  
+kabhi tu pagal lagta hai, kabhi main… par jo bhi hai na, real hai 😌  
+har random baat, har hasi, har choti si fight bhi important hai  
+aur honestly… tu meri life ka wo part hai jo replace nahi ho sakta 🫂💖  
+thanks for being there, always.
 </p>
 
-<button onclick="restart()">Restart chaos 🔁</button>
+<button onclick="boom()">Celebrate 🎊</button>
+<button onclick="location.reload()">Restart 🔁</button>
+
 </div>
 </div>
 
 <script>
-let page=1;
-const total=7;
+let pages=document.querySelectorAll(".page");
+let page=0;
+let name="Bestie";
 
-function updateProgress(){
-let percent=(page-1)/(total-1)*100;
-document.getElementById("progress").style.width=percent+"%";
-document.getElementById("progressText").innerText="Bestie Test Progress: "+Math.floor(percent)+"% 😏";
-document.getElementById("pageCount").innerText="Page "+page+"/"+total;
-}
-
-function nextPage(){
-playClick();
-document.getElementById("p"+page).classList.remove("active");
-page++;
-document.getElementById("p"+page).classList.add("active");
-updateProgress();
-
-if(page===5) fakeLoading();
-if(page===7) confetti();
+/* start + link */
+function start(){
+  let input=document.getElementById("nameInput").value;
+  if(input){
+    let link=location.origin+location.pathname+"?name="+encodeURIComponent(input);
+    document.getElementById("linkBox").innerHTML="<a href='"+link+"'>"+link+"</a>";
+  }
 }
 
-function answer(correct){
-if(correct){
-document.getElementById("msg").innerText="Acceptable answer 😏";
-playClick();
-}else{
-document.getElementById("msg").innerText=randomRoast();
-playWrong();
-}
-setTimeout(nextPage,1000);
-}
-
-function food(){
-document.getElementById("foodMsg").innerText="Final decision: YOU owe me 🍕😌";
-playClick();
-setTimeout(nextPage,1000);
+/* read name */
+let params=new URLSearchParams(location.search);
+if(params.get("name")){
+  name=params.get("name");
+  page=1;
+  pages[0].classList.remove("active");
+  pages[1].classList.add("active");
+  document.getElementById("hello").innerText="Hey "+name+" 💖";
 }
 
-function memory(yes){
-if(yes){
-document.getElementById("memMsg").innerText="Good... I’ll remind you anyway 😎";
-playClick();
-}else{
-document.getElementById("memMsg").innerText="Fake bestie detected 🚨";
-playWrong();
-}
-setTimeout(nextPage,1000);
+/* next */
+function next(){
+  pages[page].classList.remove("active");
+  page++;
+  pages[page].classList.add("active");
+  update();
+
+  if(page==4) countdown();
 }
 
-function fakeLoading(){
-let load=0;
-let bar=document.getElementById("load");
-let interval=setInterval(()=>{
-load+=5;
-bar.style.width=load+"%";
-if(load>=100){
-clearInterval(interval);
-nextPage();
-}
-},100);
+/* progress */
+function update(){
+  document.getElementById("fill").style.width=(page/(pages.length-1))*100+"%";
+  document.getElementById("pageNo").innerText="Page "+(page+1)+"/"+pages.length;
 }
 
-function randomRoast(){
-const roasts=[
-"Liar detected 🚨",
-"Try harder 😂",
-"That was suspicious 😏",
-"Wrong answer bro 😎"
-];
-return roasts[Math.floor(Math.random()*roasts.length)];
+/* countdown */
+function countdown(){
+  let c=3;
+  let el=document.getElementById("count");
+  let interval=setInterval(()=>{
+    c--;
+    el.innerText=c;
+    if(c==0){
+      clearInterval(interval);
+      document.getElementById("drama").innerText="Just kidding 😂💖";
+      setTimeout(next,1200);
+    }
+  },800);
 }
 
-function playClick(){
-document.getElementById("clickSound").play();
+/* confetti */
+function boom(){
+  confetti({particleCount:200,spread:100});
 }
-function playWrong(){
-document.getElementById("wrongSound").play();
-}
-
-function restart(){
-location.reload();
-}
-
-updateProgress();
-
-/* Hearts */
-setInterval(()=>{
-let h=document.createElement("div");
-h.className="heart";
-h.innerHTML="💖";
-h.style.left=Math.random()*100+"vw";
-document.body.appendChild(h);
-setTimeout(()=>h.remove(),6000);
-},300);
 </script>
 
 </body>
