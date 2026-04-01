@@ -2,212 +2,280 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Bestie Forever 💖</title>
+<title>Bestie Chaos Test 💖</title>
 
-<!-- Confetti CDN -->
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
 <style>
 body {
-    margin: 0;
+    margin:0;
     font-family: 'Comic Sans MS', cursive;
-    background: linear-gradient(135deg, #ffd6f6, #e0ccff, #cce7ff);
-    text-align: center;
-    overflow: hidden;
+    background: linear-gradient(135deg,#ffd6f6,#d6ccff,#cce7ff);
+    overflow:hidden;
+    text-align:center;
 }
 
-/* Floating hearts */
-.heart {
-    position: absolute;
-    color: pink;
-    animation: floatUp 6s linear infinite;
+/* Fade */
+.page {
+    display:none;
+    opacity:0;
+    transition:0.5s;
 }
-
-@keyframes floatUp {
-    0% { transform: translateY(100vh) scale(1); opacity: 1; }
-    100% { transform: translateY(-10vh) scale(1.5); opacity: 0; }
+.active {
+    display:block;
+    opacity:1;
 }
 
 /* Card */
 .card {
-    background: rgba(255,255,255,0.2);
+    background:rgba(255,255,255,0.2);
     backdrop-filter: blur(10px);
-    padding: 30px;
-    border-radius: 20px;
-    width: 90%;
-    max-width: 400px;
-    margin: 100px auto;
-    box-shadow: 0 0 20px rgba(255,255,255,0.5);
-}
-
-/* Text */
-h1, p {
-    color: #333;
+    padding:25px;
+    border-radius:20px;
+    width:90%;
+    max-width:400px;
+    margin:80px auto;
 }
 
 /* Buttons */
 button {
-    padding: 12px 25px;
-    border: none;
-    border-radius: 30px;
-    cursor: pointer;
-    font-size: 16px;
-    margin: 10px;
+    padding:10px 20px;
+    margin:8px;
+    border:none;
+    border-radius:25px;
+    cursor:pointer;
 }
 
-/* YES button */
-#yesBtn {
-    background: #ff6fa5;
-    color: white;
-    animation: bounce 1s infinite alternate;
+.option {
+    background:#ff6fa5;
+    color:white;
 }
 
-@keyframes bounce {
-    from { transform: scale(1); }
-    to { transform: scale(1.1); }
+/* Progress */
+.progress-container {
+    width:80%;
+    margin:20px auto;
+}
+.progress-bar {
+    height:10px;
+    background:#fff;
+    border-radius:10px;
+    overflow:hidden;
+}
+.progress-fill {
+    height:100%;
+    width:0%;
+    background:#ff6fa5;
 }
 
-/* NO button */
-#noBtn {
-    background: #aaa;
-    color: white;
-    position: relative;
+/* Loading bar */
+.loading {
+    width:80%;
+    height:10px;
+    background:#eee;
+    margin:20px auto;
+    border-radius:10px;
+    overflow:hidden;
+}
+.loading-fill {
+    height:100%;
+    width:0%;
+    background:#ff6fa5;
 }
 
-/* Hidden section */
-#result {
-    display: none;
+/* Floating hearts */
+.heart {
+    position:absolute;
+    color:pink;
+    animation:float 6s linear infinite;
+}
+@keyframes float {
+    0%{transform:translateY(100vh);}
+    100%{transform:translateY(-10vh);}
 }
 </style>
 </head>
 
 <body>
 
-<!-- Floating Hearts Script -->
-<script>
-setInterval(() => {
-    const heart = document.createElement("div");
-    heart.className = "heart";
-    heart.innerHTML = "💖";
-    heart.style.left = Math.random() * 100 + "vw";
-    heart.style.fontSize = (Math.random() * 20 + 10) + "px";
-    document.body.appendChild(heart);
+<audio id="clickSound" src="https://www.soundjay.com/buttons/sounds/button-3.mp3"></audio>
+<audio id="wrongSound" src="https://www.soundjay.com/button/beep-10.mp3"></audio>
 
-    setTimeout(() => {
-        heart.remove();
-    }, 6000);
-}, 300);
-</script>
+<div class="progress-container">
+    <div class="progress-bar">
+        <div class="progress-fill" id="progress"></div>
+    </div>
+    <p id="progressText">Bestie Test Progress: 0% 😏</p>
+    <p id="pageCount">Page 1/7</p>
+</div>
 
+<!-- PAGES -->
+
+<div class="page active" id="p1">
 <div class="card">
+<h2>Initializing Bestie Test 🤖</h2>
+<p>Checking loyalty level...</p>
+<button onclick="nextPage()">Start Test 😎</button>
+</div>
+</div>
 
-    <!-- Typing Text -->
-    <h2 id="typing"></h2>
+<div class="page" id="p2">
+<div class="card">
+<h2>Who is more pagal? 😂</h2>
+<button class="option" onclick="answer(true)">Both 😂</button>
+<button class="option" onclick="answer(false)">You 😌</button>
+<button class="option" onclick="answer(false)">Me 😎</button>
+<p id="msg"></p>
+</div>
+</div>
 
-    <!-- Question -->
-    <h1 id="question" style="display:none;">
-        Will you be my bestie forever? 🫶
-    </h1>
+<div class="page" id="p3">
+<div class="card">
+<h2>Who owes food? 🍕</h2>
+<button class="option" onclick="food()">You owe me</button>
+<button class="option" onclick="food()">I owe you</button>
+<button class="option" onclick="food()">Ignore 😎</button>
+<p id="foodMsg"></p>
+</div>
+</div>
 
-    <!-- GIFS -->
-    <div id="gifs" style="display:none;">
-        <img src="https://media.giphy.com/media/3oriO0OEd9QIDdllqo/giphy.gif" width="120"><br>
-        <img src="https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif" width="120"><br>
-        <img src="https://media.giphy.com/media/26BRv0ThflsHCqDrG/giphy.gif" width="120">
-    </div>
+<div class="page" id="p4">
+<div class="card">
+<h2>Remember embarrassing moment? 👀</h2>
+<button class="option" onclick="memory(true)">Yes 😭</button>
+<button class="option" onclick="memory(false)">No 😐</button>
+<p id="memMsg"></p>
+</div>
+</div>
 
-    <!-- Buttons -->
-    <div id="buttons" style="display:none;">
-        <button id="yesBtn">YES 💕</button>
-        <button id="noBtn">NO 😏</button>
-    </div>
+<div class="page" id="p5">
+<div class="card">
+<h2>Analyzing Results... ⏳</h2>
+<div class="loading"><div class="loading-fill" id="load"></div></div>
+</div>
+</div>
 
-    <!-- Result -->
-    <div id="result">
-        <h1>YAYYYY 💖</h1>
-        <p>
-            I knew you had no choice 😎<br>
-            You're my favorite human 🫶<br>
-            Thanks for tolerating my nonsense 😂
-        </p>
+<div class="page" id="p6">
+<div class="card">
+<h2>RESULT 😎</h2>
+<p>YOU ARE STUCK WITH ME FOREVER 💖</p>
+<button onclick="nextPage()">Accept your fate 😂</button>
+</div>
+</div>
 
-        <img src="https://media.giphy.com/media/5GoVLqeAOo6PK/giphy.gif" width="150">
+<div class="page" id="p7">
+<div class="card">
+<h2>🎉 Congrats 🎉</h2>
 
-        <p>
-            Thanks for being my bestie 🫶<br>
-            From stupid jokes to serious talks…<br>
-            You make everything better 😌<br>
-            Even when we share one brain cell 😂
-        </p>
-    </div>
+<img src="https://media.giphy.com/media/5GoVLqeAOo6PK/giphy.gif" width="150">
+<img src="https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif" width="150">
 
+<p>
+You passed the chaos test 😂<br>
+You're officially my bestie 🫶<br>
+No return policy 😎
+</p>
+
+<button onclick="restart()">Restart chaos 🔁</button>
+</div>
 </div>
 
 <script>
-// Typing animation
-const lines = [
-"Hey Bestie 💖",
-"You are literally stuck with me forever 😌",
-"After all the chaos we've done together...",
-"So answer this carefully 👀"
-];
+let page=1;
+const total=7;
 
-let i = 0, j = 0;
-function type() {
-    if (i < lines.length) {
-        if (j < lines[i].length) {
-            document.getElementById("typing").innerHTML += lines[i].charAt(j);
-            j++;
-            setTimeout(type, 40);
-        } else {
-            document.getElementById("typing").innerHTML += "<br>";
-            i++; j = 0;
-            setTimeout(type, 500);
-        }
-    } else {
-        document.getElementById("question").style.display = "block";
-        document.getElementById("buttons").style.display = "block";
-        document.getElementById("gifs").style.display = "block";
-    }
+function updateProgress(){
+let percent=(page-1)/(total-1)*100;
+document.getElementById("progress").style.width=percent+"%";
+document.getElementById("progressText").innerText="Bestie Test Progress: "+Math.floor(percent)+"% 😏";
+document.getElementById("pageCount").innerText="Page "+page+"/"+total;
 }
-type();
 
-// NO button movement + text
-const noTexts = [
-"Are you serious?? 😭",
-"After everything we've done?? 😤",
-"Remember that embarrassing moment 👀",
-"You owe me food btw 🍕",
-"Wrong answer detected 😎",
-"Try again bestie 😂"
+function nextPage(){
+playClick();
+document.getElementById("p"+page).classList.remove("active");
+page++;
+document.getElementById("p"+page).classList.add("active");
+updateProgress();
+
+if(page===5) fakeLoading();
+if(page===7) confetti();
+}
+
+function answer(correct){
+if(correct){
+document.getElementById("msg").innerText="Acceptable answer 😏";
+playClick();
+}else{
+document.getElementById("msg").innerText=randomRoast();
+playWrong();
+}
+setTimeout(nextPage,1000);
+}
+
+function food(){
+document.getElementById("foodMsg").innerText="Final decision: YOU owe me 🍕😌";
+playClick();
+setTimeout(nextPage,1000);
+}
+
+function memory(yes){
+if(yes){
+document.getElementById("memMsg").innerText="Good... I’ll remind you anyway 😎";
+playClick();
+}else{
+document.getElementById("memMsg").innerText="Fake bestie detected 🚨";
+playWrong();
+}
+setTimeout(nextPage,1000);
+}
+
+function fakeLoading(){
+let load=0;
+let bar=document.getElementById("load");
+let interval=setInterval(()=>{
+load+=5;
+bar.style.width=load+"%";
+if(load>=100){
+clearInterval(interval);
+nextPage();
+}
+},100);
+}
+
+function randomRoast(){
+const roasts=[
+"Liar detected 🚨",
+"Try harder 😂",
+"That was suspicious 😏",
+"Wrong answer bro 😎"
 ];
+return roasts[Math.floor(Math.random()*roasts.length)];
+}
 
-const noBtn = document.getElementById("noBtn");
+function playClick(){
+document.getElementById("clickSound").play();
+}
+function playWrong(){
+document.getElementById("wrongSound").play();
+}
 
-noBtn.addEventListener("mouseover", () => {
-    const x = Math.random() * 200 - 100;
-    const y = Math.random() * 200 - 100;
-    noBtn.style.transform = `translate(${x}px, ${y}px)`;
+function restart(){
+location.reload();
+}
 
-    noBtn.innerText = noTexts[Math.floor(Math.random() * noTexts.length)];
-});
+updateProgress();
 
-// YES button
-document.getElementById("yesBtn").addEventListener("click", () => {
-
-    // Confetti
-    confetti({
-        particleCount: 150,
-        spread: 70,
-        origin: { y: 0.6 }
-    });
-
-    document.getElementById("result").style.display = "block";
-    document.getElementById("buttons").style.display = "none";
-    document.getElementById("question").style.display = "none";
-    document.getElementById("gifs").style.display = "none";
-});
+/* Hearts */
+setInterval(()=>{
+let h=document.createElement("div");
+h.className="heart";
+h.innerHTML="💖";
+h.style.left=Math.random()*100+"vw";
+document.body.appendChild(h);
+setTimeout(()=>h.remove(),6000);
+},300);
 </script>
 
 </body>
-  </html>
+</html>
